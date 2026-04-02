@@ -1,0 +1,8 @@
+streamlit
+PyMuPDF
+Pillow
+anthropic
+google-generativeai
+python-dotenv
+python-docx
+supabase
