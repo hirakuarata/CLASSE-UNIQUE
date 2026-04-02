@@ -196,7 +196,7 @@ st.markdown("""
 <style>
     /* -------- 全体デザイン (カラースキームとタイポグラフィ) -------- */
     .stApp { background-color: #f5f5f5 !important; }
-    html, body, [class*="st-"] { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    html, body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
     
     /* カードコンテナ (border=True のコンテナを白背景・角丸・影付きにする) */
     div[data-testid="stVerticalBlockBorderWrapper"] {
