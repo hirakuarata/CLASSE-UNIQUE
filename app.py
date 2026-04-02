@@ -188,8 +188,40 @@ def generate_english_test(images, task_instruction, model_choice, task_name=""):
             
         return f"⚠️ AIエラー詳細: {str(e)}"
 
+# --- パスワード認証機能 ---
+def check_password():
+    app_password = os.getenv("APP_PASSWORD", "classe123")
+    try:
+        if "APP_PASSWORD" in st.secrets:
+            app_password = st.secrets["APP_PASSWORD"]
+    except Exception:
+        pass
+        
+    if st.session_state.get("password_correct", False):
+        return True
+        
+    st.markdown("<br><br><br>", unsafe_allow_html=True)
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        with st.container(border=True):
+            st.markdown("<h2 style='text-align:center;'>CLASSE UNIQUE<br><span style='font-size:16px;'>-Repeat Lab-</span></h2>", unsafe_allow_html=True)
+            st.markdown("<p style='text-align:center; color:#666;'>教員専用のシステムです。<br>アクセス用パスワードを入力してください。</p>", unsafe_allow_html=True)
+            
+            password = st.text_input("パスワード", type="password", label_visibility="collapsed", placeholder="••••••••")
+            
+            if st.button("ログイン", type="primary", use_container_width=True):
+                if password == app_password:
+                    st.session_state["password_correct"] = True
+                    st.rerun()
+                else:
+                    st.error("パスワードが違います。")
+    return False
+
 # --- アプリの基本設定 ---
 st.set_page_config(page_title="CLASSE UNIQUE × Repeat Lab", page_icon="📝", layout="wide")
+
+if not check_password():
+    st.stop()
 
 # CSS: 全体のスタイリングとカードUI化、印刷時の制御
 st.markdown("""
@@ -395,9 +427,13 @@ with col_title:
 def get_supabase_client():
     url = os.environ.get("SUPABASE_URL")
     key = os.environ.get("SUPABASE_KEY")
-    if getattr(st, "secrets", None):
+    
+    try:
         if "SUPABASE_URL" in st.secrets: url = st.secrets["SUPABASE_URL"]
         if "SUPABASE_KEY" in st.secrets: key = st.secrets["SUPABASE_KEY"]
+    except Exception:
+        pass
+        
     if not url or not key: return None
     try:
         from supabase import create_client
